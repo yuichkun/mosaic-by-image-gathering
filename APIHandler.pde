@@ -1,7 +1,10 @@
 class APIHandler {
   final String imgServer = "http://pixabay.com/api/";
-  final String APIKey = "5940765-473ab300ba0823791f930fc29";
-  final String baseURL = imgServer + "/?key=" + APIKey;
+  String baseURL;
+  APIHandler(String APIKey){
+    
+    this.baseURL = imgServer + "/?key=" + APIKey;
+  }
   void load(String imgURL, boolean isTarget) {
     ImageLoader imgLoader = new ImageLoader(imgURL);
     imgLoader.start();

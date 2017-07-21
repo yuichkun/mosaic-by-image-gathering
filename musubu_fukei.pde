@@ -1,3 +1,5 @@
+final String APIKey = "";
+
 import http.requests.*;
 
 Dipictor dipictor;
@@ -5,7 +7,8 @@ APIHandler apiHandler;
 
 final int IMG_PER_PAGE = 200;
 final int PAGES = 1;
-final String keyword = "temple";
+final String keyword = "monkey";
+
 
 int targetID = 1;
 int GRID = 10;
@@ -15,7 +18,7 @@ void setup() {
   //size(1280, 720, P2D);
   frameRate(20);
   dipictor = new Dipictor();
-  apiHandler = new APIHandler();
+  apiHandler = new APIHandler(APIKey);
   ArrayList<String> imgURLs = apiHandler.search("&orientation=horizontal&image_type=photo" + "&q=" + keyword + "&per_page=" + str(IMG_PER_PAGE));
   for (int i = 0; i < imgURLs.size(); i++) {
     String imgURL = imgURLs.get(i);
@@ -46,7 +49,6 @@ void mousePressed() {
 void keyPressed() {
   try {
     if (keyCode == RIGHT) {
-
       targetID++;
       ImageContainer target = dipictor.images.get(targetID);
       dipictor.changeTarget(target);
@@ -62,8 +64,10 @@ void keyPressed() {
   catch(IndexOutOfBoundsException e) {
   }
   if (keyCode == UP) {
-    GRID = floor(GRID * 1.5);
-    dipictor.updateGRID();
+    if (GRID < 150) {
+      GRID = floor(GRID * 1.5);
+      dipictor.updateGRID();
+    }
   }
   if (keyCode == DOWN) {
     if (GRID > 5) {
@@ -71,4 +75,5 @@ void keyPressed() {
       dipictor.updateGRID();
     }
   }
+  println(GRID);
 }
