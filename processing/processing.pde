@@ -1,49 +1,49 @@
-final String APIKey = "";
-
-import http.requests.*;
-
 Dipictor dipictor;
-APIHandler apiHandler;
-
-final int IMG_PER_PAGE = 200;
-final int PAGES = 1;
-final String keyword = "monkey";
-
 
 int targetID = 1;
 int GRID = 10;
+String path = sketchPath();
+
 
 void setup() {
-  fullScreen();
-  //size(1280, 720, P2D);
-  frameRate(20);
-  dipictor = new Dipictor();
-  apiHandler = new APIHandler(APIKey);
-  ArrayList<String> imgURLs = apiHandler.search("&orientation=horizontal&image_type=photo" + "&q=" + keyword + "&per_page=" + str(IMG_PER_PAGE));
-  for (int i = 0; i < imgURLs.size(); i++) {
-    String imgURL = imgURLs.get(i);
-    boolean isTarget = i == targetID;
-    apiHandler.load(imgURL, isTarget);
+  //fullScreen();
+  size(1280, 720, P2D);
+  frameRate(5);
+  dipictor = new Dipictor();;  File dir= new File(dataPath(""));
+  File [] files= dir.listFiles();
+  for (int i = 0; i < files.length; i++) {
+    String imgURL = files[i].getName();
+    if (i == 0) {
+      PImage target = loadImage("data/" + imgURL);
+      dipictor.setTarget(target);
+      dipictor.createPartials();
+    } else {
+      PImage img = loadImage(imgURL);
+      ImageContainer imgContainer = new ImageContainer(img);
+      imgContainer.calcColor();
+      dipictor.addImage(imgContainer);
+    }
   }
 }
 
 
-boolean flag = false;
+boolean shouldShowTarget = false;
 void draw() {
   background(0);
 
   dipictor.updatePartials();
 
-  if (flag) {
+  if (shouldShowTarget) {
     dipictor.showTarget();
   } else {
     dipictor.showPartials();
   }
-  ////dipictor.showGallery();
+  //dipictor.showGallery();
 }
 
 void mousePressed() {
-  flag = !flag;
+  shouldShowTarget = !shouldShowTarget;
+  println(dipictor.images.size());
 }
 
 void keyPressed() {
@@ -75,5 +75,4 @@ void keyPressed() {
       dipictor.updateGRID();
     }
   }
-  println(GRID);
 }
