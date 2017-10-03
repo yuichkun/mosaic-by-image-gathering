@@ -7,7 +7,6 @@ const query = queryString.stringify(config);
 axios.get('https://pixabay.com/api/?' + query)
      .then((res) => {
          const hits = res.data.hits;
-        //  console.log(res.data);
          hits.forEach( (hit, i) =>{
              const url = hit.webformatURL;
              console.log(`fetching ${i} th image from ${url}`);
